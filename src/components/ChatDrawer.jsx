@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useChat } from '../context/ChatContext';
+import { useBook } from '../context/BookContext';
 import ReactMarkdown from 'react-markdown';
 
 export default function ChatDrawer() {
@@ -7,6 +8,8 @@ export default function ChatDrawer() {
     messages, loading, sendMessage, summarize, clearChat, 
     isDrawerOpen, closeDrawer, sessionId 
   } = useChat();
+  const { books, activeBook } = useBook();
+  const activeBookInfo = books?.find(b => b.id === activeBook);
   
   const [inputMsg, setInputMsg] = useState('');
   const [manualPages, setManualPages] = useState('');
@@ -64,7 +67,7 @@ export default function ChatDrawer() {
           {messages.length === 0 ? (
             <div className="drawer-empty-state">
               <div className="text-4xl">🧬</div>
-              <p>Ask me anything about medical physiology or Guyton & Hall.</p>
+              <p>Ask me anything about {activeBookInfo?.title || 'the active book'}.</p>
             </div>
           ) : (
             messages.map((msg, idx) => (

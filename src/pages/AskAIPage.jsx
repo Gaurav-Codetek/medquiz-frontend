@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useBook } from '../context/BookContext';
 import { useChat } from '../context/ChatContext';
 import { FiSend } from 'react-icons/fi';
 
 export default function AskAIPage() {
   const location = useLocation();
   const preselected = location.state || {};
+  const { books, activeBook } = useBook();
+  const activeBookInfo = books?.find(b => b.id === activeBook);
 
   const { messages, loading, sendMessage, summarize, clearChat } = useChat();
   const [input, setInput] = useState('');
@@ -57,7 +60,7 @@ export default function AskAIPage() {
       <div className="page-header" style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between' }}>
         <div>
           <h1>💬 Ask AI</h1>
-          <p>Ask anything about Medical Physiology — history is synced with your drawer</p>
+          <p>Ask anything about {activeBookInfo?.title || 'the selected book'} — history is synced with your drawer</p>
         </div>
         <button className="btn btn-secondary btn-sm" onClick={clearChat} style={{borderColor: 'var(--accent-red)', color: 'var(--accent-red)'}}>
           Clear Chat
@@ -113,7 +116,7 @@ export default function AskAIPage() {
           {messages.length === 0 && (
             <div className="empty-state" style={{ paddingTop: '60px' }}>
               <div className="empty-icon">🔬</div>
-              <h3>Ask anything about Medical Physiology</h3>
+              <h3>Ask anything about {activeBookInfo?.title || 'this book'}</h3>
               <p style={{ maxWidth: '400px' }}>
                 Your chat is synced! You can open this in a new tab or use the side drawer.
               </p>
@@ -146,7 +149,7 @@ export default function AskAIPage() {
           <input
             type="text"
             className="input"
-            placeholder="Ask a question about Medical Physiology..."
+            placeholder={`Ask a question about ${activeBookInfo?.title || 'the book'}...`}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}

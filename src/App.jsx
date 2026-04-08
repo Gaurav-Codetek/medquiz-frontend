@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { BookProvider } from './context/BookContext';
 import { ChatProvider } from './context/ChatContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
@@ -24,8 +25,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <ChatProvider>
-          <Routes>
+        <BookProvider>
+          <ChatProvider>
+            <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route
               path="/"
@@ -61,7 +63,8 @@ export default function App() {
             />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </ChatProvider>
+          </ChatProvider>
+        </BookProvider>
       </AuthProvider>
     </BrowserRouter>
   );

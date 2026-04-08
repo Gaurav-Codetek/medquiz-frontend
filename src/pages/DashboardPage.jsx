@@ -1,19 +1,24 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useBook } from '../context/BookContext';
 import { document as docApi } from '../api/client';
 import { FiBookOpen, FiHelpCircle } from 'react-icons/fi';
 import { HiOutlineAcademicCap } from 'react-icons/hi';
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const { activeBook } = useBook();
   const [docInfo, setDocInfo] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!activeBook) return;
+    
     const fetchInfo = async () => {
       try {
-        const res = await docApi.getInfo();
+        setLoading(true);
+        const res = await docApi.getInfo(activeBook);
         setDocInfo(res.data);
       } catch (err) {
         console.error('Failed to fetch doc info:', err);
@@ -22,19 +27,20 @@ export default function DashboardPage() {
       }
     };
     fetchInfo();
+    
     // Poll if still indexing
     const interval = setInterval(async () => {
       try {
-        const res = await docApi.getStatus();
+        const res = await docApi.getStatus(activeBook);
         if (res.data.status === 'ready') {
-          const info = await docApi.getInfo();
+          const info = await docApi.getInfo(activeBook);
           setDocInfo(info.data);
           clearInterval(interval);
         }
       } catch {}
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [activeBook]);
 
   return (
     <div className="page">

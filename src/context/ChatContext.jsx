@@ -1,11 +1,13 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { qa } from '../api/client';
 import { useAuth } from './AuthContext';
+import { useBook } from './BookContext';
 
 const ChatContext = createContext(null);
 
 export function ChatProvider({ children }) {
   const { user } = useAuth();
+  const { activeBook } = useBook();
   const [messages, setMessages] = useState([]);
   const [sessionId, setSessionId] = useState(localStorage.getItem('medquiz_session_id') || null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -45,7 +47,7 @@ export function ChatProvider({ children }) {
     setLoading(true);
 
     try {
-      const payload = { question };
+      const payload = { question, book_id: activeBook };
       if (sessionId) payload.session_id = sessionId;
       if (useAutoRetrieve) {
         payload.auto_retrieve = true;
@@ -84,7 +86,7 @@ export function ChatProvider({ children }) {
     setLoading(true);
 
     try {
-      const res = await qa.summarize({ pages: manualPages.trim() });
+      const res = await qa.summarize({ pages: manualPages.trim(), book_id: activeBook });
       setMessages(prev => [...prev, {
         role: 'ai',
         content: res.data.summary,

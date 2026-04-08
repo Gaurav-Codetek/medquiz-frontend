@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useBook } from '../context/BookContext';
 import { quiz as quizApi } from '../api/client';
 import QuizCard from '../components/QuizCard';
 
 export default function QuizPage() {
   const location = useLocation();
+  const { activeBook } = useBook();
   const preselected = location.state || {};
 
   // Config state
@@ -31,6 +33,7 @@ export default function QuizPage() {
     setLoading(true);
     try {
       const res = await quizApi.generate({
+        book_id: activeBook,
         pages: pages.trim(),
         num_questions: numQuestions,
         difficulty,

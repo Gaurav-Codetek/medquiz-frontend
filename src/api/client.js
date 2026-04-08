@@ -41,11 +41,12 @@ export const auth = {
 
 // ---------- Document ----------
 export const document = {
-  getStatus: () => client.get('/document/status'),
-  getInfo: () => client.get('/document/info'),
-  getTree: () => client.get('/document/tree'),
-  getPages: (pages) => client.get(`/document/pages?pages=${pages}`),
-  search: (q, topK = 5) => client.get(`/document/search?q=${encodeURIComponent(q)}&top_k=${topK}`),
+  getBooks: () => client.get('/document/books'),
+  getStatus: (bookId) => client.get(`/document/status?book_id=${bookId}`),
+  getInfo: (bookId) => client.get(`/document/info?book_id=${bookId}`),
+  getTree: (bookId) => client.get(`/document/tree?book_id=${bookId}`),
+  getPages: (pages, bookId) => client.get(`/document/pages?pages=${pages}&book_id=${bookId}`),
+  search: (q, bookId, topK = 5) => client.get(`/document/search?q=${encodeURIComponent(q)}&book_id=${bookId}&top_k=${topK}`),
 };
 
 // ---------- Quiz ----------

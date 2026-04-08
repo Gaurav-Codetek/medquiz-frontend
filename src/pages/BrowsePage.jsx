@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useBook } from '../context/BookContext';
 import { document as docApi } from '../api/client';
 import TreeView from '../components/TreeView';
 
@@ -10,21 +11,28 @@ export default function BrowsePage() {
   const [loadingTree, setLoadingTree] = useState(true);
   const [loadingContent, setLoadingContent] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const { activeBook } = useBook();
   const navigate = useNavigate();
 
   useEffect(() => {
-    docApi.getTree()
+    if (!activeBook) return;
+    setLoadingTree(true);
+    setTree([]);
+    setSelectedNode(null);
+    setPageContent([]);
+    
+    docApi.getTree(activeBook)
       .then((res) => setTree(res.data))
       .catch(console.error)
       .finally(() => setLoadingTree(false));
-  }, []);
+  }, [activeBook]);
 
   const handleNodeSelect = async (node) => {
     setSelectedNode(node);
     setLoadingContent(true);
     try {
       const pages = `${node.start_index}-${Math.min(node.end_index, node.start_index + 4)}`;
-      const res = await docApi.getPages(pages);
+      const res = await docApi.getPages(pages, activeBook);
       setPageContent(res.data);
     } catch (err) {
       console.error('Failed to load page content:', err);

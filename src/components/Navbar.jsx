@@ -1,11 +1,13 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useBook } from '../context/BookContext';
 import { useChat } from '../context/ChatContext';
-import { FiGrid, FiBookOpen, FiHelpCircle, FiLogOut } from 'react-icons/fi';
+import { FiGrid, FiBookOpen, FiHelpCircle, FiLogOut, FiBook } from 'react-icons/fi';
 import { HiOutlineAcademicCap } from 'react-icons/hi';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { books, activeBook, switchBook, loading } = useBook();
   const { toggleDrawer } = useChat();
   const navigate = useNavigate();
 
@@ -48,6 +50,25 @@ export default function Navbar() {
         </ul>
 
         <div className="navbar-user">
+          {books && books.length > 0 && (
+            <div className="flex items-center gap-2 mr-4 bg-dark-bg border border-white/10 rounded-lg px-2 py-1">
+              <FiBook size={14} className="text-primary-light" />
+              <select 
+                value={activeBook} 
+                onChange={(e) => switchBook(e.target.value)}
+                disabled={loading}
+                className="bg-transparent text-white text-sm outline-none border-none cursor-pointer"
+                style={{ width: '150px' }}
+              >
+                {books.map(b => (
+                  <option key={b.id} value={b.id} className="bg-dark-bg text-white">
+                    {b.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <button className="btn btn-primary btn-sm" onClick={toggleDrawer} style={{marginRight: '12px', display: 'flex', alignItems: 'center', gap: '4px'}}>
              <span>✨</span> Drawer
           </button>
