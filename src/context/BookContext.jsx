@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import api from '../api/client';
+import * as api from '../api/client';
 import { useAuth } from './AuthContext';
 
 const BookContext = createContext(null);
@@ -20,11 +20,11 @@ export const BookProvider = ({ children }) => {
     try {
       setLoading(true);
       const res = await api.document.getBooks();
-      setBooks(res.books);
+      setBooks(res.data.books); // Need .data because axios response wraps it!
       
       // If activeBook is not in the list, set to the first one available
-      if (res.books.length > 0 && !res.books.find(b => b.id === activeBook)) {
-        setActiveBook(res.books[0].id);
+      if (res.data.books.length > 0 && !res.data.books.find(b => b.id === activeBook)) {
+        setActiveBook(res.data.books[0].id);
       }
     } catch (err) {
       console.error("Failed to load books:", err);
