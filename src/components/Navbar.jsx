@@ -51,17 +51,18 @@ export default function Navbar() {
 
         <div className="navbar-user">
           {books && books.length > 0 && (
-            <div className="flex items-center gap-2 mr-4 bg-dark-bg border border-white/10 rounded-lg px-2 py-1">
-              <FiBook size={14} className="text-primary-light" />
+            <div className="book-selector-container">
+              <span className="book-selector-icon">
+                <FiBook size={14} />
+              </span>
               <select 
                 value={activeBook} 
                 onChange={(e) => switchBook(e.target.value)}
                 disabled={loading}
-                className="bg-transparent text-white text-sm outline-none border-none cursor-pointer"
-                style={{ width: '150px' }}
+                className="book-selector-dropdown"
               >
                 {books.map(b => (
-                  <option key={b.id} value={b.id} className="bg-dark-bg text-white">
+                  <option key={b.id} value={b.id}>
                     {b.title}
                   </option>
                 ))}

@@ -1159,3 +1159,43 @@ textarea.input {
 }
 .drawer-page-input { width: 80px; }
 .drawer-text-input { flex: 1; }
+
+/* ====================== BOOK SELECTOR ====================== */
+.book-selector-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 16px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  padding: 6px 12px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease-in-out;
+}
+.book-selector-container:hover {
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 8px rgba(0, 184, 148, 0.2);
+}
+.book-selector-icon {
+  color: var(--accent-teal);
+  display: flex;
+  align-items: center;
+}
+.book-selector-dropdown {
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: inherit;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 170px;
+  text-overflow: ellipsis;
+  appearance: none; /* remove default arrow to make it look cleaner */
+}
+.book-selector-dropdown option {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
